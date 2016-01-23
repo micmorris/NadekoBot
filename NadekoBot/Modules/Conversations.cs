@@ -17,7 +17,6 @@ namespace NadekoBot.Modules
 {
     class Conversations : DiscordModule
     {
-        private string firestr = "🔥 ด้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็็็้้้้้็็ด้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็ด้้้้้็็็็็้้้้้็็็็็้้้้้้้้็็็็็้้้้้็็็็็้้้้ 🔥";
         public Conversations() : base()
         {
             commands.Add(new CopyCommand());
@@ -70,10 +69,10 @@ namespace NadekoBot.Modules
                             t.Interval = 2000;
                             t.Elapsed += (s, ev) => { Environment.Exit(0); };
                             t.Start();
-                            await e.Send(e.User.Mention + ", Yes, my love.");
+                            await e.Send(e.User.Mention + " If you insist.");
                         }
                         else
-                            await e.Send(e.User.Mention + ", No.");
+                            await e.Send(e.User.Mention + " HAH, what, do you think you OWN me?");
                     });
 
                 Stopwatch randServerSW = new Stopwatch();
@@ -129,9 +128,9 @@ namespace NadekoBot.Modules
                     .Description("Replies with positive answer only to the bot owner.")
                     .Do(async e => {
                         if (e.User.Id == NadekoBot.OwnerID)
-                            await e.Send(e.User.Mention + ", Of course I do, my Master.");
+                            await e.Send(e.User.Mention + ", I could love no one else.");
                         else
-                            await e.Send(e.User.Mention + ", Don't be silly.");
+                            await e.Send(e.User.Mention + " That's awful forward of you, we just met.");
                     });
 
                 cgb.CreateCommand("how are you")
@@ -140,18 +139,18 @@ namespace NadekoBot.Modules
                     {
                         if (e.User.Id == NadekoBot.OwnerID)
                         {
-                            await e.Send(e.User.Mention + " I am great as long as you are here.");
+                            await e.Send(e.User.Mention + " as great as always!");
                         }
                         else
                         {
                             var kw = e.Server.GetUser(NadekoBot.OwnerID);
                             if (kw != null && kw.Status == UserStatus.Online)
                             {
-                                await e.Send(e.User.Mention + " I am great as long as " + kw.Mention + " is with me.");
+                                await e.Send(e.User.Mention + " chillin'");
                             }
                             else
                             {
-                                await e.Send(e.User.Mention + " I am sad. My Master is not with me.");
+                                await e.Send(e.User.Mention + " I feel alone...");
                             }
                         }
                     });
@@ -161,7 +160,11 @@ namespace NadekoBot.Modules
                     .Description("Only works for owner. Insults @X person.\n**Usage**: @NadekoBot insult @X.")
                     .Do(async e =>
                     {
-                        List<string> insults = new List<string> { " you are a poop.", " you jerk.", " i will eat you when i get my powers back." };
+                        List<string> insults = new List<string> { " you are a poop."
+                            , " you jerk."
+                            , " i will eat you when i get my powers back."
+                            , " your mother was a murloc."
+                            , " you smell like a leper gnome."};
                         Random r = new Random();
                         var u = e.Channel.FindUsers(e.GetArg("mention")).FirstOrDefault();
 
@@ -172,15 +175,11 @@ namespace NadekoBot.Modules
 
                         if (u.Id == NadekoBot.OwnerID)
                         {
-                            await e.Send("I would never insult my master <3");
-                        }
-                        else if (e.User.Id == NadekoBot.OwnerID)
-                        {
-                            await e.Send(u.Mention + insults[r.Next(0, insults.Count)]);
+                            await e.Send("Gee, I can't think of anything to say about him...");
                         }
                         else
                         {
-                            await e.Send(e.User.Mention + " Eww, why would i do that for you ?!");
+                            await e.Send(u.Mention + insults[r.Next(0, insults.Count)]);
                         }
                     });
 
@@ -189,7 +188,11 @@ namespace NadekoBot.Modules
                     .Parameter("mention", ParameterType.Required)
                     .Do(async e =>
                     {
-                        List<string> praises = new List<string> { " You are cool.", " You are nice... But don't get any wrong ideas.", " You did a good job." };
+                        List<string> praises = new List<string> { " You are cool."
+                            , " You did something of value."
+                            , " You did a good job."
+                            , " Your mother would be impressed."
+                            , " Wow."};
                         Random r = new Random();
                         var u = e.Channel.FindUsers(e.GetArg("mention")).FirstOrDefault();
 
@@ -199,26 +202,7 @@ namespace NadekoBot.Modules
                             return;
                         }
 
-                        if (e.User.Id == NadekoBot.OwnerID)
-                        {
-                            if (u.Id != NadekoBot.OwnerID)
-                                await e.Send(u.Mention + praises[r.Next(0, praises.Count)]);
-                            else
-                            {
-                                await e.Send(u.Mention + " No need, you know I love you <3");
-                            }
-                        }
-                        else
-                        {
-                            if (u.Id == NadekoBot.OwnerID)
-                            {
-                                await e.Send(e.User.Mention + " I don't need your permission to praise my beloved Master <3");
-                            }
-                            else
-                            {
-                                await e.Send(e.User.Mention + " Yeah... No.");
-                            }
-                        }
+                        await e.Send(u.Mention + praises[r.Next(0, praises.Count)]);
                     });
 
                 cgb.CreateCommand("are you real")
@@ -239,6 +223,7 @@ namespace NadekoBot.Modules
                     {
                         await e.Send("Sorry, I don't gamble, type $draw for that function.");
                     });
+                /*
                 cgb.CreateCommand("fire")
                     .Description("Shows a unicode fire message. Optional parameter [x] tells her how many times to repeat the fire.\n**Usage**: @NadekoBot fire [x]")
                     .Parameter("times", ParameterType.Optional)
@@ -259,6 +244,7 @@ namespace NadekoBot.Modules
                         }
                         await e.Send(str);
                     });
+                    */
 
                 cgb.CreateCommand("rip")
                     .Description("Shows a grave image.Optional parameter [@X] instructs her to put X's name on the grave.\n**Usage**: @NadekoBot rip [@X]")
