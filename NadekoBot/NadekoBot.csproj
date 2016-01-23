@@ -57,10 +57,10 @@
     <ManifestKeyFile>NadekoBot_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PRIVATE|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -72,7 +72,32 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Discord.Net, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dlls\Discord.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Net.Audio, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dlls\Discord.Net.Audio.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Net.Commands, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dlls\Discord.Net.Commands.dll</HintPath>
+    </Reference>
+    <Reference Include="Discord.Net.Modules, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dlls\Discord.Net.Modules.dll</HintPath>
+    </Reference>
+    <Reference Include="libvideo">
+      <HintPath>..\dlls\libvideo.dll</HintPath>
+    </Reference>
     <Reference Include="Manatee.Json, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c267f67a39449c62, processorArchitecture=MSIL">
       <HintPath>..\packages\Manatee.Json.3.2.1\lib\net45\Manatee.Json.dll</HintPath>
       <Private>True</Private>
@@ -96,6 +121,12 @@
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Nito.AsyncEx">
+      <HintPath>..\dlls\Nito.AsyncEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Enlightenment">
+      <HintPath>..\dlls\Nito.AsyncEx.Enlightenment.dll</HintPath>
     </Reference>
     <Reference Include="Parse, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Parse.1.6.2\lib\net45\Parse.dll</HintPath>
@@ -134,6 +165,10 @@
       <HintPath>..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="WebSocket4Net, Version=0.14.1.0, Culture=neutral, PublicKeyToken=eb4e154b696bf72a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dlls\WebSocket4Net.dll</HintPath>
+    </Reference>
     <Reference Include="YoutubeExtractor, Version=0.10.10.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\YoutubeExtractor.0.10.10\lib\net35\YoutubeExtractor.dll</HintPath>
       <Private>True</Private>
@@ -166,8 +201,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Discord.Net.Audio.xproj" />
     <None Include="NadekoBot_TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -180,24 +217,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="E:\Ostalo\Discord.Net\src\Discord.Net.Audio.Net45\Discord.Net.Audio.csproj">
-      <Project>{7bfef748-b934-4621-9b11-6302e3a9f6b3}</Project>
-      <Name>Discord.Net.Audio</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Ostalo\Discord.Net\src\Discord.Net.Commands.Net45\Discord.Net.Commands.csproj">
-      <Project>{1b5603b4-6f8f-4289-b945-7baae523d740}</Project>
-      <Name>Discord.Net.Commands</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Ostalo\Discord.Net\src\Discord.Net.Modules.Net45\Discord.Net.Modules.csproj">
-      <Project>{3091164f-66ae-4543-a63d-167c1116241d}</Project>
-      <Name>Discord.Net.Modules</Name>
-    </ProjectReference>
-    <ProjectReference Include="E:\Ostalo\Discord.Net\src\Discord.Net.Net45\Discord.Net.csproj">
-      <Project>{8d71a857-879a-4a10-859e-5ff824ed6688}</Project>
-      <Name>Discord.Net</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
