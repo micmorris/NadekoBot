@@ -39,6 +39,8 @@ namespace NadekoBot.Modules {
                             Console.WriteLine("Bug in music task run. " + e);
                         }
                         await Task.Delay(200);
+
+                        CleanMusicPlayers();
                     }
                 });
             }
@@ -57,8 +59,8 @@ namespace NadekoBot.Modules {
             }
 
         }
-        
-        public static ConcurrentDictionary<Server, MusicControls> musicPlayers = new ConcurrentDictionary<Server,MusicControls>();
+
+        public static ConcurrentDictionary<Server, MusicControls> musicPlayers = new ConcurrentDictionary<Server, MusicControls>();
 
 
         public Music() : base() {
@@ -76,7 +78,7 @@ namespace NadekoBot.Modules {
         public override void Install(ModuleManager manager) {
             var client = NadekoBot.client;
 
-            
+
 
             manager.CreateCommands("!m", cgb => {
                 //queue all more complex commands
@@ -138,6 +140,15 @@ namespace NadekoBot.Modules {
                         await e.Send(string.Join("\n", player.SongQueue.Select(v => v.Title).Take(10)));
                     });
 
+                cgb.CreateCommand("np")
+                 .Alias("playing")
+                 .Description("Shows the song currently playing.")
+                 .Do(async e => {
+                     if (musicPlayers.ContainsKey(e.Server) == false) return;
+                     var player = musicPlayers[e.Server];
+                     await e.Send($"Now Playing **{player.CurrentSong.Title}**");
+                 });
+
                 cgb.CreateCommand("clrbfr")
                     .Alias("clearbuffers")
                     .Description("Clears the music buffer across all servers. **Owner only.**")
@@ -160,6 +171,28 @@ namespace NadekoBot.Modules {
                         await e.Send(":musical_note: Songs shuffled!");
                     });
             });
+        }
+        internal static void CleanMusicPlayers() {
+            foreach (var mp in musicPlayers
+                                .Where(kvp => kvp.Value.CurrentSong == null
+                                && kvp.Value.SongQueue.Count == 0)) {
+                var val = mp.Value;
+                musicPlayers.TryRemove(mp.Key, out val);
+            }
+        }
+
+        internal static string GetMusicStats() {
+            var servers = 0;
+            var queued = 0;
+            musicPlayers.ForEach(kvp => {
+                var mp = kvp.Value;
+                if(mp.SongQueue.Count > 0 || mp.CurrentSong != null)
+                    queued += mp.SongQueue.Count + 1;
+                servers++;
+            });
+
+            return $"Playing {queued} songs across {servers} servers.";
+
         }
     }
 
@@ -233,10 +266,11 @@ namespace NadekoBot.Modules {
 
                 StartBuffering();
                 LinkResolved = true;
-                Channel.Send(":musical_note: **Queued** " + video.Title);
+                Channel.Send($"{User.Mention}, Queued **{video.Title}**");
             } catch (Exception e) {
                 // Send a message to the guy that queued that
-                Channel.SendMessage(":warning: Something went wrong...");
+                Channel.SendMessage("This video is unavailable in the country the Bot is running in, or you enter an invalid name or url.");
+
                 Console.WriteLine("Cannot parse youtube url: " + query);
                 Cancel();
             }
@@ -598,7 +632,7 @@ namespace NadekoBot.Modules {
                     return;
 
                 // Start streaming to voice
-                await streamRequest.Channel.SendMessage($":musical_note: Playing {streamRequest.Title}");
+                 await streamRequest.Channel.SendMessage($"Playing **{streamRequest.Title}** [{streamRequest.Length}]");
 
                 var audioService = client.Audio();
                 voiceClient = await audioService.Join(streamRequest.VoiceChannel);
@@ -638,6 +672,7 @@ namespace NadekoBot.Modules {
                 Console.WriteLine("Exception while playing music: " + ex);
             } finally {
                 if (voiceClient != null) {
+					await streamRequest.Channel.SendMessage($"Finished playing **{streamRequest.Title}**");
                     State = StreamTaskState.Completed;
                     streamer?.Cancel();
                     await voiceClient.Disconnect();

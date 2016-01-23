@@ -103,6 +103,7 @@ namespace NadekoBot.Modules
                     });
 
                 cgb.CreateCommand(".b").Alias(".ban")
+                    .Parameter("everything",ParameterType.Unparsed)
                     .Description("Bans a mentioned user")
                         .Do(async e => {
                             try {
@@ -111,10 +112,11 @@ namespace NadekoBot.Modules
                                     await usr.Server.Ban(usr);
                                     await e.Send("Banned user " + usr.Name + " Id: " + usr.Id);
                                 }
-                            } catch (Exception) { }
+                            } catch (Exception ex) { }
                         });
 
                 cgb.CreateCommand(".ub").Alias(".unban")
+                    .Parameter("everything", ParameterType.Unparsed)
                     .Description("Unbans a mentioned user")
                         .Do(async e => {
                             try {
@@ -230,7 +232,7 @@ namespace NadekoBot.Modules
 
                 cgb.CreateCommand(".stats")
                     .Description("Shows some basic stats for nadeko")
-                    .Do(async e => await e.Send("```" + NadekoBot.GetStats() + "```"));
+                    .Do(async e => await e.Send("```" + NadekoBot.GetStats() + "\n" + Music.GetMusicStats() + "```"));
 
                 cgb.CreateCommand(".leaveall")
                     .Description("Nadeko leaves all servers")
@@ -311,7 +313,7 @@ namespace NadekoBot.Modules
                             await e.Send("Announcements disabled.");
                         }
                     });
-
+                //todo add greet/bye for everyone
                 cgb.CreateCommand(".greetmsg")
                     .Description("Sets a new announce message. Type %user% if you want to mention the new member.\n**Usage**: .greetmsg Welcome to the server, %user%.")
                     .Parameter("msg", ParameterType.Unparsed)
@@ -403,7 +405,6 @@ namespace NadekoBot.Modules
                             await e.Send("Sending failed.");
                         }
                     });
-
 
             });
 
