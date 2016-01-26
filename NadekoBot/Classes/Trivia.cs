@@ -39,7 +39,7 @@ namespace NadekoBot
             TriviaGame tg;
             if ((tg = StartNewGame(e)) != null)
             {
-                await e.Send("**Trivia game started!**\nFirst player to get to 10 points wins! You have 30 seconds per question.\nUse command [tq] if game was started by accident.\nTyping [idfk] 15 seconds after the question has started will give you a hint.");
+                await e.Send("**Trivia game started!**\nFirst player to get to 10 points wins! You have 30 seconds per question.\nUse command [tq] if game was started by accident.\n**Type [idfk] for a hint.**");
             }
             else
                 await e.Send("Trivia game is already running on this server. The question is:\n**" + GetCurrentQuestion(e.Server.Id).Question + "**");
@@ -91,7 +91,7 @@ namespace NadekoBot
         {
             if (runningTrivias.ContainsKey(e.Server.Id) && runningTrivias[e.Server.Id].ChannelId == e.Channel.Id)
             {
-                await e.Send("Trivia will stop after this question. Run [**@NadekoBot clr**] to remove this bot's messages from the channel.");
+                await e.Send("**Trivia will stop after this question.**");
                 runningTrivias[e.Server.Id].StopGame();
             }
             else await e.Send("No trivias are running on this channel.");
@@ -285,11 +285,8 @@ namespace NadekoBot
         }
 
         public async void GetHint(MessageEventArgs e) {
-            if (timeout != null && !isQuit && stopwatch.ElapsedMilliseconds > 10000)
+            if (timeout != null && !isQuit)
                 await e.Send( currentQuestion.Answer.Scramble());
-            else {
-                await e.Send( $"You have to wait {10-stopwatch.ElapsedMilliseconds/1000} more seconds in order to get a hint.");
-            }
         }
 
         public void StopGame() {

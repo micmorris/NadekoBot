@@ -15,12 +15,17 @@ namespace NadekoBot.Extensions
         public static string Scramble(this string word) {
 
             var letters = word.ToArray();
+            int count = 0;
             for (int i = 0; i < letters.Length; i++)
             {
-                if (i % 3 == 0)
-                {
+                if (letters[i] == ' ')
                     continue;
-                }
+                count++;
+                if (count <= letters.Length / 5)
+                    continue;
+
+                if (count % 3 == 0)
+                    continue;
 
                 if (letters[i] != ' ')
                     letters[i] = '_';
