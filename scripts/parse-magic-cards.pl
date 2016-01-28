@@ -76,10 +76,10 @@ while($str =~ /<card>\s+<name>([^<]+)<\/name>[\s\w<="\/>]+<manacost>([^<]*)<\/ma
 	#<STDIN>;
 
 	print OUTPUT " {\n";
-	print OUTPUT "  \"Question\":\"$cost - $type - ";
+	print OUTPUT "  \"Question\":\"\\n$cost\\n$type\\n";
 	if($type =~ /creature/i)
 	{
-		print OUTPUT "$pt - ";
+		print OUTPUT "$pt\\n";
 	}
 	print OUTPUT "$text\",\n";
 	print OUTPUT "  \"Answer\":\"$name\"\n";
